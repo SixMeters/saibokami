@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理 - WebDemo</title>
+    <style>
+        * {
+            margin: 0;              /* 清除外边距 */
+            padding: 0;             /* 清除内边距 */
+            box-sizing: border-box; /* 使用 border-box 盒模型，padding 和 border 包含在宽度内 */
+        }
+
+        body {
+            /* 字体族：使用系统默认字体栈，优先使用 Apple 系统字体，然后是 Segoe UI 等 */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;       /* 行高为字体大小的 1.6 倍，提高可读性 */
+            color: #333;            /* 文字颜色为深灰色 */
+            /* 背景渐变：从左上角到右下角的线性渐变，从紫色到深紫色 */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;      /* 最小高度为视口高度的 100%，确保背景充满整个屏幕 */
+        }
+
+        .content {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 1200px;
+            padding: 30px;
+        }
+        .container{
+            max-width: 1200px;      /* 最大宽度为 1200 像素 */
+            margin: 0 auto;         /* 上下边距为 0，左右自动居中 */
+            padding: 20px;          /* 内边距为 20 像素 */
+
+        }
+
+        /* .header p {
+            color: #666;
+            font-size: 14px;
+        } */
+
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .add-user-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .add-user-form h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .role-admin {
+            background: #dc3545;
+            color: white;
+        }
+
+        .role-user {
+            background: #28a745;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link a:hover {
+            color: #5568d3;
+            text-decoration: underline;
+        }
+
+         /* 头部导航栏样式 */
+        header {
+            background: rgba(255, 255, 255, 0.95); /* 半透明白色背景，透明度 95% */
+            padding: 20px 0;        /* 上下内边距 20 像素，左右为 0 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 添加阴影效果，增加层次感 */
+            position: sticky;       /* 粘性定位：滚动时固定在顶部 */
+            top: 0;                /* 距离顶部 0 像素 */
+            z-index: 100;          /* 层级为 100，确保在其他元素之上 */
+        }
+
+        /* 导航栏容器样式 */
+        nav {
+            display: flex;          /* 使用弹性布局 */
+            justify-content: space-between; /* 两端对齐：logo 在左，导航链接在右 */
+            align-items: center;    /* 垂直居中对齐 */
+        }
+
+        /* Logo 样式 */
+        .logo {
+            font-size: 24px;       /* 字体大小 24 像素 */
+            font-weight: bold;     /* 字体加粗 */
+            color: #667eea;        /* 文字颜色为紫色 */
+        }
+
+        /* 导航链接列表样式 */
+        .nav-links {
+            display: flex;          /* 使用弹性布局 */
+            gap: 20px;              /* 子元素之间的间距为 20 像素 */
+            list-style: none;       /* 清除列表样式（无圆点） */
+        }
+
+        /* 导航链接样式 */
+        .nav-links a {
+            text-decoration: none;  /* 清除下划线 */
+            color: #333;            /* 文字颜色为深灰色 */
+            transition: color 0.3s; /* 颜色变化过渡动画，持续 0.3 秒 */
+        }
+
+        /* 导航链接悬停样式 */
+        .nav-links a:hover {
+            color: #667eea;        /* 悬停时文字颜色变为紫色 */
+        }
+        
+    </style>
+</head>
+
+<body>
+
+    <header th:replace="~{fragments/navbar :: navbar}"></header>
+    <main class="container">
+
+
+        <div class="content">
+            <div th:if="${userSuccess}" class="message success-message">
+                <span th:text="${userSuccess}"></span>
+            </div>
+            <div th:if="${userError}" class="message error-message">
+                <span th:text="${userError}"></span>
+            </div>
+
+            <form class="add-user-form" action="/admin/users/add" method="post">
+                <h3>添加新用户</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="username">用户名</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">角色</label>
+                        <select id="role" name="role" required>
+                            <option value="USER">普通用户</option>
+                            <option value="ADMIN">管理员</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">添加用户</button>
+                </div>
+            </form>
+
+            <form action="/admin/users/delete" method="post">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>角色</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${users.isEmpty()}">
+                            <td colspan="6" class="empty-state">
+                                暂无用户数据
+                            </td>
+                        </tr>
+                        <tr th:each="user : ${users}">
+                            <td><input type="checkbox" name="ids" th:value="${user.id}"></td>
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td>
+                                <span class="role-badge"
+                                    th:classappend="${user.role == 'ADMIN' ? 'role-admin' : 'role-user'}"
+                                    th:text="${user.role == 'ADMIN' ? '管理员' : '普通用户'}">
+                                </span>
+                            </td>
+                            <td th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td>
+                                <button type="button" class="btn btn-success"
+                                    th:attr="onclick=|showEditModal(${user.id}, '${user.username}', '${user.role}')|">
+                                    编辑
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div th:if="${!users.isEmpty()}" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('确定要删除选中的用户吗？')">
+                        删除选中用户
+                    </button>
+                </div>
+            </form>
+
+            <div class="back-link">
+                <a href="/dashboard">返回功能选择页面</a>
+            </div>
+        </div>
+
+        <div id="editModal"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+            <div
+                style="background: white; width: 400px; margin: 100px auto; padding: 30px; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+                <h3 style="margin-bottom: 20px;">编辑用户</h3>
+                <form action="/admin/users/edit" method="post">
+                    <input type="hidden" id="edit-id" name="id">
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="edit-username">用户名</label>
+                        <input type="text" id="edit-username" name="username" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="edit-password">密码（留空不修改）</label>
+                        <input type="password" id="edit-password" name="password">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="edit-role">角色</label>
+                        <select id="edit-role" name="role" required>
+                            <option value="USER">普通用户</option>
+                            <option value="ADMIN">管理员</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">保存</button>
+                        <button type="button" class="btn" style="flex: 1; background: #6c757d; color: white;"
+                            onclick="closeEditModal()">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script>
+        function toggleSelectAll() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('input[name="ids"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+        }
+
+        function showEditModal(id, username, role) {
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-username').value = username;
+            document.getElementById('edit-role').value = role;
+            document.getElementById('edit-password').value = '';
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+    </script>
+
+</body>
+
+</html>

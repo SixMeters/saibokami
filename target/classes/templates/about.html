@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!-- HTML5 文档类型声明 -->
+<html lang="zh-CN">
+<!-- html 根元素，lang 属性指定页面语言为简体中文 -->
+<head>
+    <!-- 字符编码声明：使用 UTF-8 编码，支持中文等所有字符 -->
+    <meta charset="UTF-8">
+    <!-- 视口配置：使页面在移动设备上正确显示，宽度等于设备宽度，初始缩放比例为 1.0 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 页面描述：用于 SEO 搜索引擎优化 -->
+    <meta name="description" content="关于 WebDemo 项目">
+    <!-- 页面标题：显示在浏览器标签页上 -->
+    <title>关于我们 - WebDemo</title>
+    <style>
+        /* CSS 样式开始 */
+
+        /* 通配符选择器：重置所有元素的默认样式 */
+        * {
+            margin: 0;              /* 清除外边距 */
+            padding: 0;             /* 清除内边距 */
+            box-sizing: border-box; /* 使用 border-box 盒模型，padding 和 border 包含在宽度内 */
+        }
+
+        /* body 元素样式：页面主体样式 */
+        body {
+            /* 字体族：使用系统默认字体栈，优先使用 Apple 系统字体，然后是 Segoe UI 等 */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;       /* 行高为字体大小的 1.6 倍，提高可读性 */
+            color: #333;            /* 文字颜色为深灰色 */
+            /* 背景渐变：从左上角到右下角的线性渐变，从紫色到深紫色 */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;      /* 最小高度为视口高度的 100%，确保背景充满整个屏幕 */
+        }
+
+        /* 容器样式：用于限制内容最大宽度并居中 */
+        .container {
+            max-width: 1200px;      /* 最大宽度为 1200 像素 */
+            margin: 0 auto;         /* 上下边距为 0，左右自动居中 */
+            padding: 20px;         /* 内边距为 20 像素 */
+        }
+
+        /* 头部导航栏样式 */
+        header {
+            background: rgba(255, 255, 255, 0.95); /* 半透明白色背景，透明度 95% */
+            padding: 20px 0;        /* 上下内边距 20 像素，左右为 0 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 添加阴影效果，增加层次感 */
+            position: sticky;       /* 粘性定位：滚动时固定在顶部 */
+            top: 0;                /* 距离顶部 0 像素 */
+            z-index: 100;          /* 层级为 100，确保在其他元素之上 */
+        }
+
+        /* 导航栏容器样式 */
+        nav {
+            display: flex;          /* 使用弹性布局 */
+            justify-content: space-between; /* 两端对齐：logo 在左，导航链接在右 */
+            align-items: center;    /* 垂直居中对齐 */
+        }
+
+        /* Logo 样式 */
+        .logo {
+            font-size: 24px;       /* 字体大小 24 像素 */
+            font-weight: bold;     /* 字体加粗 */
+            color: #667eea;        /* 文字颜色为紫色 */
+        }
+
+        /* 导航链接列表样式 */
+        .nav-links {
+            display: flex;          /* 使用弹性布局 */
+            gap: 20px;              /* 子元素之间的间距为 20 像素 */
+            list-style: none;       /* 清除列表样式（无圆点） */
+        }
+
+        /* 导航链接样式 */
+        .nav-links a {
+            text-decoration: none;  /* 清除下划线 */
+            color: #333;            /* 文字颜色为深灰色 */
+            transition: color 0.3s; /* 颜色变化过渡动画，持续 0.3 秒 */
+        }
+
+        /* 导航链接悬停样式 */
+        .nav-links a:hover {
+            color: #667eea;        /* 悬停时文字颜色变为紫色 */
+        }
+
+        /* 内容区域样式 */
+        .content {
+            background: rgba(255, 255, 255, 0.95); /* 半透明白色背景 */
+            padding: 40px;          /* 内边距 40 像素 */
+            border-radius: 10px;   /* 圆角半径 10 像素 */
+            margin: 40px 0;        /* 上下外边距 40 像素，左右为 0 */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
+        }
+
+        /* 内容区域标题样式 */
+        .content h1 {
+            color: #667eea;        /* 文字颜色为紫色 */
+            margin-bottom: 20px;   /* 下边距 20 像素 */
+            font-size: 36px;       /* 字体大小 36 像素 */
+        }
+
+        /* 内容区域段落样式 */
+        .content p {
+            margin-bottom: 15px;   /* 下边距 15 像素 */
+            color: #555;           /* 文字颜色为灰色 */
+        }
+
+        /* 技术栈展示区域样式：使用网格布局 */
+        .tech-stack {
+            display: grid;         /* 使用网格布局 */
+            /* 自动适应列宽，每列最小 200 像素，自动填充 */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;              /* 网格间距 20 像素 */
+            margin: 30px 0;         /* 上下外边距 30 像素，左右为 0 */
+        }
+
+        /* 技术栈项目样式 */
+        .tech-item {
+            background: #f8f9fa;   /* 浅灰色背景 */
+            padding: 20px;          /* 内边距 20 像素 */
+            border-radius: 8px;     /* 圆角半径 8 像素 */
+            text-align: center;     /* 文本居中对齐 */
+            border-left: 4px solid #667eea; /* 左侧边框为紫色，宽度 4 像素 */
+        }
+
+        /* 按钮样式 */
+        .btn {
+            display: inline-block; /* 显示为行内块元素 */
+            padding: 12px 30px;    /* 上下内边距 12 像素，左右 30 像素 */
+            /* 背景渐变：从紫色到深紫色 */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;          /* 文字颜色为白色 */
+            text-decoration: none;  /* 清除下划线 */
+            border-radius: 5px;     /* 圆角半径 5 像素 */
+            transition: transform 0.3s, box-shadow 0.3s; /* 变换和阴影的过渡动画 */
+            margin-top: 20px;       /* 上外边距 20 像素 */
+        }
+
+        /* 按钮悬停样式 */
+        .btn:hover {
+            transform: translateY(-2px); /* 向上移动 2 像素 */
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); /* 添加阴影效果 */
+        }
+
+        /* 页脚样式 */
+        footer {
+            background: rgba(0, 0, 0, 0.8); /* 半透明黑色背景，透明度 80% */
+            color: white;           /* 文字颜色为白色 */
+            text-align: center;     /* 文本居中对齐 */
+            padding: 20px;          /* 内边距 20 像素 */
+            margin-top: 60px;       /* 上外边距 60 像素 */
+        }
+
+        /* 媒体查询：针对屏幕宽度小于 768 像素的设备（如手机） */
+        @media (max-width: 768px) {
+            .content h1 {
+                font-size: 28px;   /* 内容区域标题字体大小减小到 28 像素 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部导航栏 -->
+    <header th:replace="~{fragments/navbar :: navbar}"></header>
+
+    <!-- 页面主要内容区域 -->
+    <main class="container">
+        <div class="content">
+            <!-- 页面主标题 -->
+            <h1>关于 WebDemo</h1>
+            <!-- 项目介绍段落 -->
+            <p>WebDemo 是一个基于 Spring Boot 框架构建的现代化 Web 应用程序示例。本项目展示了如何快速搭建一个高性能、可扩展的 Java Web 应用。</p>
+            
+            <!-- 技术栈标题 -->
+            <h2 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">技术栈</h2>
+            <!-- 技术栈展示区域 -->
+            <div class="tech-stack">
+                <!-- 技术栈项目 1：Java 17 -->
+                <div class="tech-item">
+                    <h3>Java 17</h3>
+                    <p>现代 Java 版本</p>
+                </div>
+                <!-- 技术栈项目 2：Spring Boot 3.2 -->
+                <div class="tech-item">
+                    <h3>Spring Boot 3.2</h3>
+                    <p>企业级框架</p>
+                </div>
+                <!-- 技术栈项目 3：Thymeleaf -->
+                <div class="tech-item">
+                    <h3>Thymeleaf</h3>
+                    <p>模板引擎</p>
+                </div>
+                <!-- 技术栈项目 4：Tomcat -->
+                <div class="tech-item">
+                    <h3>Tomcat</h3>
+                    <p>嵌入式服务器</p>
+                </div>
+            </div>
+
+            <!-- 特性标题 -->
+            <h2 style="color: #667eea; margin-top: 30px; margin-bottom: 15px;">特性</h2>
+            <!-- 特性列表 -->
+            <ul style="margin-left: 20px; color: #555;">
+                <li>支持 IPv4 公网访问</li>
+                <li>优化的服务器配置</li>
+                <li>响应式前端设计</li>
+                <li>高性能并发处理</li>
+                <li>健康检查监控</li>
+            </ul>
+
+            <!-- 返回首页按钮 -->
+            <a href="/" class="btn">返回首页</a>
+        </div>
+    </main>
+
+    <!-- 页脚区域 -->
+    <footer>
+        <p>&copy; 2026 WebDemo. All rights reserved.</p>
+    </footer>
+</body>
+</html>

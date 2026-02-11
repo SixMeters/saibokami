@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="管理员卡密导入页面">
+    <title>卡密导入 - WebDemo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 10px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .content h1 {
+            color: #667eea;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .import-form {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .import-form h2 {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .import-form p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: monospace;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-right: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .card-keys-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-keys-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .card-keys-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .card-keys-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .card-keys-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .warning-message {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">WebDemo</div>
+                <ul class="nav-links">
+                    <li><a href="/admin/import">卡密导入</a></li>
+                    <li><a href="/admin/users">用户管理</a></li>
+                    <li><a href="/logout">退出登录</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="content">
+            <h1>卡密导入</h1>
+            <p>批量导入卡密信息，每行一个卡密，格式：卡密代码,卡密类型,卡密状态,过期时间</p>
+
+            <div th:if="${importSuccess}" class="success-message">
+                ✅ <span th:text="${importSuccess}"></span>
+            </div>
+
+            <div th:if="${importDuplicate}" class="warning-message">
+                ⚠️ <span th:text="${importDuplicate}"></span>
+            </div>
+
+            <div th:if="${importError}" class="error-message">
+                ❌ <span th:text="${importError}"></span>
+            </div>
+
+            <div class="import-form">
+                <h2>输入卡密信息</h2>
+                <p>每行输入格式：卡密代码,卡密类型,卡密状态,过期时间</p>
+                <p>例如：3040710720e4Kp73,月卡,未下载激活,2026-03-31 00:00:00</p>
+                <form action="/admin/import" method="post">
+                    <div class="form-group">
+                        <label for="cardKeys">卡密信息（每行一个）</label>
+                        <textarea id="cardKeys" name="cardKeys" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">导入卡密</button>
+                    <a href="/admin/import" class="btn btn-secondary">清空</a>
+                </form>
+            </div>
+
+            <h2>已导入的卡密列表</h2>
+            <form action="/admin/delete" method="post">
+                <table class="card-keys-table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
+                            <th>卡密代码</th>
+                            <th>卡密类型</th>
+                            <th>卡密状态</th>
+                            <th>过期时间</th>
+                            <th>兑换状态</th>
+                            <th>兑换时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cardKey : ${cardKeys}">
+                            <td><input type="checkbox" name="ids" th:value="${cardKey.id}" class="card-key-checkbox"></td>
+                            <td th:text="${cardKey.cardKey}"></td>
+                            <td th:text="${cardKey.cardType}"></td>
+                            <td th:text="${cardKey.cardStatus}"></td>
+                            <td th:text="${cardKey.expireTime}"></td>
+                            <td>
+                                <span th:if="${cardKey.isRedeemed}" style="color: #dc3545;">已兑换</span>
+                                <span th:unless="${cardKey.isRedeemed}" style="color: #28a745;">未兑换</span>
+                            </td>
+                            <td th:text="${cardKey.redeemedAt}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn delete-btn">删除选中的卡密</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function toggleAll(checkbox) {
+            const checkboxes = document.querySelectorAll('.card-key-checkbox');
+            checkboxes.forEach(cb => {
+                cb.checked = checkbox.checked;
+            });
+        }
+    </script>
+</body>
+</html>
